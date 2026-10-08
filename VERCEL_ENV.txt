@@ -1,0 +1,14 @@
+# ==============================================================================
+# SARBIX SCHOOL OS — VERCEL PRODUCTION ENVIRONMENT VARIABLES
+# ==============================================================================
+# Instructions for Vercel:
+# 1. In your Vercel Project Dashboard, navigate to: Settings -> Environment Variables
+# 2. You can either copy-paste the whole block below into the first input box
+#    (Vercel will auto-parse all key-value pairs) OR add each variable one-by-one.
+# 3. Select environments: Production, Preview, Development.
+# ==============================================================================
+
+NEXT_PUBLIC_SUPABASE_URL=https://debhfqjgqmlmujrfyrny.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlYmhmcWpncW1sbXVqcmZ5cm55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MzUxODUsImV4cCI6MjA5NzQxMTE4NX0.DPSP69kfKlhvDFc6OErxIKrdjBsSTj93aHN80A14150
+SESSION_SECRET=sarbix-super-secure-jwt-secret-key-production-grade-256bit!
+NEXT_PUBLIC_APP_NAME=Sarbix School OS

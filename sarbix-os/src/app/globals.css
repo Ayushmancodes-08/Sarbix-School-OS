@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 70% Neutral Canvas Base */
+    --background: 250 100% 99%;        /* #FAF8FF - Cool anti-glare canvas */
+    --foreground: 222 47% 11%;          /* #0F172A - Deep charcoal ink */
+
+    /* Card & Panel Surfaces */
+    --card: 0 0% 100%;                  /* #FFFFFF - Crisp pure white */
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* 20% Structural Brand Primary */
+    --primary: 225 52% 16%;             /* #131E3D - Deep institutional navy */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 225 52% 22%;
+
+    /* Secondary Surfaces & Wells */
+    --secondary: 231 100% 96%;          /* #EAEDFF - Soft well background */
+    --secondary-foreground: 225 52% 16%;
+
+    --muted: 231 50% 95%;               /* #F2F3FF - Muted table header */
+    --muted-foreground: 220 9% 46%;      /* #64748B - Slate metadata */
+
+    /* 10% Expressive Accent (Electric Violet) */
+    --accent: 262 83% 58%;              /* #7C3AED - Electric violet */
+    --accent-foreground: 0 0% 100%;
+    --accent-subtle: 262 83% 96%;       /* #F5F3FF - Violet tinted surface */
+
+    /* Destructive Status */
+    --destructive: 0 84% 60%;           /* #DC2626 - Coral red */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Semantic Status Indicators */
+    --success: 161 94% 30%;             /* #059669 - Emerald */
+    --success-foreground: 0 0% 100%;
+    --success-bg: 152 76% 96%;          /* #ECFDF5 */
+
+    --warning: 38 92% 50%;              /* #D97706 - Amber */
+    --warning-foreground: 0 0% 100%;
+    --warning-bg: 48 100% 96%;          /* #FFFBEB */
+
+    /* Hairline Structural Borders */
+    --border: 230 40% 91%;              /* #E2E7FF */
+    --input: 230 40% 91%;
+    --ring: 262 83% 58%;                /* Violet focus ring */
+
+    /* Charts */
+    --chart-1: 262 83% 58%;             /* Electric violet */
+    --chart-2: 225 52% 16%;             /* Deep navy */
+    --chart-3: 161 94% 30%;             /* Emerald */
+    --chart-4: 38 92% 50%;              /* Amber */
+    --chart-5: 199 89% 48%;             /* Cyan */
+
+    --radius: 0.5rem;                   /* 8px container radius */
+
+    /* Navigation Rail Chrome */
+    --sidebar-background: 225 52% 16%;  /* Deep obsidian navy */
+    --sidebar-foreground: 240 100% 98%;
+    --sidebar-primary: 262 83% 58%;     /* Electric violet active indicator */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 225 50% 24%;
+    --sidebar-accent-foreground: 240 100% 98%;
+    --sidebar-border: 225 40% 22%;
+    --sidebar-ring: 262 83% 58%;
+  }
+
+  .dark {
+    --background: 224 71% 4%;           /* #020617 - Deepest obsidian */
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;                /* #0F172A - Elevated dark card */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 262 83% 58%;             /* Violet becomes prominent in dark mode */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 262 83% 65%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+    --accent-subtle: 262 50% 15%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 161 94% 30%;
+    --success-foreground: 0 0% 100%;
+    --success-bg: 161 90% 10%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --warning-bg: 38 90% 10%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 262 83% 58%;
+
+    --chart-1: 262 83% 58%;
+    --chart-2: 199 89% 48%;
+    --chart-3: 161 94% 30%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 0 84% 60%;
+
+    --sidebar-background: 224 71% 4%;
+    --sidebar-foreground: 240 100% 98%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 240 100% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 262 83% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased selection:bg-accent/20 selection:text-accent;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline tracking-tight;
+  }
+}
+
+/* Custom utility for tabular numbers */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

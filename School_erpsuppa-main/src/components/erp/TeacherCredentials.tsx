@@ -1,0 +1,208 @@
+
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { Copy, KeyRound } from "lucide-react";
+import { useData } from "@/lib/data-context";
+import { useSupabase } from "@/supabase/provider";
+
+type TeacherCredentialsProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+export default function TeacherCredentials({ open, onOpenChange }: TeacherCredentialsProps) {
+  const { teachers } = useData();
+  const [selectedTeacherId, setSelectedTeacherId] = useState<string>('');
+  const [generatedId, setGeneratedId] = useState('');
+  const [generatedPassword, setGeneratedPassword] = useState('');
+  const { toast } = useToast();
+  const supabase = useSupabase();
+
+  const handleGenerate = async () => {
+    if (!selectedTeacherId) {
+      toast({ title: "Error", description: "Please select a teacher.", variant: "destructive" });
+      return;
+    }
+    if (!supabase || !teachers) return;
+
+    const teacher = teachers.find(t => t.id === selectedTeacherId);
+    if (!teacher) return;
+
+    const teacherUserId = `TCH-${teacher.name.split(' ').join('').slice(0, 5).toUpperCase()}`;
+    const password = Math.random().toString(36).slice(-8);
+
+    console.log('Generating teacher credentials:', {
+      teacherName: teacher.name,
+      teacherUserId,
+      password,
+      role: 'Teacher'
+    });
+
+    setGeneratedId(teacherUserId);
+    setGeneratedPassword(password);
+    
+    try {
+      // Check if credentials already exist
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('*')
+        .eq('user_id', teacherUserId)
+        .single();
+
+      if (existingUser) {
+        console.log('Teacher credentials already exist:', existingUser);
+        setGeneratedId(existingUser.user_id);
+        setGeneratedPassword(existingUser.password);
+        toast({ 
+          title: "Credentials Already Exist!", 
+          description: `Login: ${existingUser.user_id} / ${existingUser.password}`,
+          duration: 15000
+        });
+        return;
+      }
+
+      // Add the new teacher to the users list (database uses snake_case)
+      const { data, error } = await supabase.from('users').insert({
+          user_id: teacherUserId,
+          password: password,
+          role: 'Teacher'
+      }).select();
+
+      if (error) {
+        console.error('Error inserting teacher credentials:', error);
+        
+        // If duplicate key error, fetch existing credentials
+        if (error.code === '23505') {
+          const { data: existing } = await supabase
+            .from('users')
+            .select('*')
+            .eq('user_id', teacherUserId)
+            .single();
+          
+          if (existing) {
+            setGeneratedId(existing.user_id);
+            setGeneratedPassword(existing.password);
+            toast({ 
+              title: "Credentials Already Exist!", 
+              description: `Login: ${existing.user_id} / ${existing.password}`,
+              duration: 15000
+            });
+            return;
+          }
+        }
+        
+        toast({ 
+          title: "Error", 
+          description: `Failed to create credentials: ${error.message}`, 
+          variant: "destructive" 
+        });
+        return;
+      }
+
+      console.log('Teacher credentials saved to database:', data);
+      toast({ 
+        title: "Credentials Generated!", 
+        description: `Login: ${teacherUserId} / ${password}`,
+        duration: 10000
+      });
+    } catch (err) {
+      console.error('Exception generating credentials:', err);
+      toast({ 
+        title: "Error", 
+        description: "Failed to generate credentials. Check console.", 
+        variant: "destructive" 
+      });
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({ title: "Copied!", description: "Credentials copied to clipboard." });
+  };
+  
+  const resetAndClose = () => {
+    setSelectedTeacherId('');
+    setGeneratedId('');
+    setGeneratedPassword('');
+    onOpenChange(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="font-headline">Generate Teacher Credentials</DialogTitle>
+          <DialogDescription>
+            Select a teacher to generate a new user ID and temporary password.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="teacher-select">Select Teacher</Label>
+            <Select onValueChange={setSelectedTeacherId} value={selectedTeacherId}>
+              <SelectTrigger id="teacher-select">
+                <SelectValue placeholder="Select a teacher..." />
+              </SelectTrigger>
+              <SelectContent>
+                {teachers?.map(teacher => (
+                  <SelectItem key={teacher.id} value={teacher.id}>
+                    {teacher.name} - {teacher.subject}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <Button onClick={handleGenerate} className="w-full" disabled={!selectedTeacherId}>
+            Generate Credentials
+          </Button>
+          {generatedId && generatedPassword && (
+            <div className="space-y-4 pt-4 border-t">
+              <h3 className="font-semibold">Generated Credentials</h3>
+              <div className="space-y-2">
+                <Label htmlFor="generated-id">Teacher User ID</Label>
+                <div className="flex items-center gap-2">
+                  <Input id="generated-id" value={generatedId} readOnly />
+                  <Button variant="outline" size="icon" onClick={() => copyToClipboard(generatedId)}>
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="generated-password">Password</Label>
+                 <div className="flex items-center gap-2">
+                  <Input id="generated-password" value={generatedPassword} readOnly />
+                  <Button variant="outline" size="icon" onClick={() => copyToClipboard(generatedPassword)}>
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={resetAndClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

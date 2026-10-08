@@ -17,11 +17,25 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { redirect } from "next/navigation"
 import Link from "next/link"
 
 export default async function OverviewPage() {
   // Enforce server-side authorization
   const session = await requirePermission("overview:view")
+
+  // Strict Role Redirection: Non-executive roles land on their dedicated tailored workspace
+  if (session.role === "teacher") {
+    redirect("/teacher")
+  } else if (session.role === "student") {
+    redirect("/student")
+  } else if (session.role === "parent") {
+    redirect("/parent")
+  } else if (session.role === "accountant") {
+    redirect("/finance")
+  } else if (session.role === "transport_manager") {
+    redirect("/transport")
+  }
 
   const students = db.students.getAll(session.campusId)
   const invoices = db.fees.getAll(session.campusId)

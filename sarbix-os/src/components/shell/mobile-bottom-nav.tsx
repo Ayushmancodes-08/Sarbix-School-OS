@@ -41,6 +41,9 @@ export function MobileBottomNav({
   } else if (userRole === "student") {
     homeHref = "/student"
     homeLabel = "Desk"
+  } else if (userRole === "teacher") {
+    homeHref = "/teacher"
+    homeLabel = "Class"
   } else if (userRole === "accountant") {
     homeHref = "/finance"
     homeLabel = "Finance"
@@ -54,7 +57,11 @@ export function MobileBottomNav({
   let actionLabel = "Daily"
   let ActionIcon = CalendarCheck
 
-  if (userRole === "parent") {
+  if (userRole === "teacher") {
+    actionHref = "/attendance"
+    actionLabel = "Roll Call"
+    ActionIcon = CalendarCheck
+  } else if (userRole === "parent") {
     actionHref = "/academics"
     actionLabel = "Schedule"
     ActionIcon = GraduationCap

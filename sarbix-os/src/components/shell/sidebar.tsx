@@ -18,6 +18,7 @@ import {
   Sparkles,
   ChevronRight,
   HeartHandshake,
+  Clock,
   X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -127,15 +128,63 @@ export function Sidebar({ user, campusName, mobileOpen, onCloseMobile }: Sidebar
     }
   }
 
-  // Filter items according to server-supplied permissions and role
-  const visibleNav = NAV_ITEMS.filter((item) => {
-    if (user.role === "super_admin" || user.role === "principal") return true
-    if (item.roleAllowed && item.roleAllowed.includes(user.role)) return true
-    if (item.requiredPermission && user.permissions && user.permissions.includes(item.requiredPermission as any)) {
-      return true
-    }
-    return false
-  })
+  // Define strict, role-isolated navigation menus
+  let visibleNav: NavItem[] = []
+
+  if (user.role === "teacher") {
+    visibleNav = [
+      { title: "My Classroom", href: "/teacher", icon: BookOpen },
+      { title: "Daily Attendance", href: "/attendance", icon: CalendarCheck },
+      { title: "Teaching Schedule", href: "/academics", icon: Clock },
+      { title: "Student Roster", href: "/students", icon: Users },
+    ]
+  } else if (user.role === "student") {
+    visibleNav = [
+      { title: "Student Desk", href: "/student", icon: GraduationCap },
+      { title: "My Timetable", href: "/academics", icon: BookOpen },
+    ]
+  } else if (user.role === "parent") {
+    visibleNav = [
+      { title: "Family Portal", href: "/parent", icon: HeartHandshake },
+      { title: "Fee Payments & Invoices", href: "/finance", icon: CreditCard },
+      { title: "Bus Route Telemetry", href: "/transport", icon: Bus },
+      { title: "Academic Schedule", href: "/academics", icon: BookOpen },
+    ]
+  } else if (user.role === "accountant") {
+    visibleNav = [
+      { title: "Bursar & Finance", href: "/finance", icon: CreditCard },
+      { title: "Student Registry", href: "/students", icon: Users },
+      { title: "Financial Audit Trail", href: "/audit", icon: ShieldCheck },
+    ]
+  } else if (user.role === "transport_manager") {
+    visibleNav = [
+      { title: "Fleet & GPS Operations", href: "/transport", icon: Bus },
+      { title: "Transit Attendance Manifest", href: "/attendance", icon: CalendarCheck },
+    ]
+  } else {
+    // Principal & Super Admin (Executive Command Center)
+    visibleNav = [
+      { title: "Command Center", href: "/overview", icon: LayoutDashboard },
+      { title: "Student 360", href: "/students", icon: Users },
+      { title: "Admissions Hub", href: "/admissions", icon: UserPlus, badge: "Active" },
+      { title: "Attendance Console", href: "/attendance", icon: CalendarCheck },
+      { title: "Academics & Schedule", href: "/academics", icon: BookOpen },
+      { title: "Finance & Billing", href: "/finance", icon: CreditCard },
+      { title: "Transport & Fleet", href: "/transport", icon: Bus },
+      { title: "Teacher Workspace", href: "/teacher", icon: BookOpen },
+      { title: "Family Portal", href: "/parent", icon: HeartHandshake },
+      { title: "Student Desk", href: "/student", icon: GraduationCap },
+      { title: "Audit & Governance", href: "/audit", icon: ShieldCheck },
+      { title: "System Settings", href: "/settings", icon: Settings },
+    ]
+  }
+
+  let roleHome = "/overview"
+  if (user.role === "teacher") roleHome = "/teacher"
+  else if (user.role === "student") roleHome = "/student"
+  else if (user.role === "parent") roleHome = "/parent"
+  else if (user.role === "accountant") roleHome = "/finance"
+  else if (user.role === "transport_manager") roleHome = "/transport"
 
   const roleFormatted = user.role.replace("_", " ").toUpperCase()
 
@@ -159,7 +208,7 @@ export function Sidebar({ user, campusName, mobileOpen, onCloseMobile }: Sidebar
         {/* Brand & Campus Header */}
         <div className="flex h-16 items-center justify-between border-b border-border/80 px-4">
           <Link
-            href="/overview"
+            href={roleHome}
             onClick={onCloseMobile}
             className="flex items-center space-x-2.5"
           >

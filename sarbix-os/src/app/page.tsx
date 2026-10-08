@@ -14,7 +14,7 @@ export default async function HomePage() {
   } else if (session.role === "student") {
     redirect("/student")
   } else if (session.role === "teacher") {
-    redirect("/attendance")
+    redirect("/teacher")
   } else if (session.role === "accountant") {
     redirect("/finance")
   } else if (session.role === "transport_manager") {

@@ -25,13 +25,13 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
 const DEMO_PRESETS = [
-  { role: "Principal", icon: GraduationCap, email: "principal@delhi.sarbix.edu", pass: "Password@123", desc: "Executive Command Center · Full Visibility" },
-  { role: "Teacher", icon: BookOpen, email: "teacher@delhi.sarbix.edu", pass: "Password@123", desc: "Rapid Attendance & Academic Schedule" },
-  { role: "Student", icon: User, email: "student@delhi.sarbix.edu", pass: "Password@123", desc: "Learning Hub, Digital ID & Attendance" },
-  { role: "Parent", icon: HeartHandshake, email: "parent@delhi.sarbix.edu", pass: "Password@123", desc: "Multi-Child Portal & Instant Fee Pay" },
-  { role: "Accountant", icon: CreditCard, email: "accountant@delhi.sarbix.edu", pass: "Password@123", desc: "Fee Invoicing, Receipts & Ledger" },
-  { role: "Transport", icon: Bus, email: "transport@delhi.sarbix.edu", pass: "Password@123", desc: "Fleet Telemetry & Route Waypoints" },
-  { role: "Super Admin", icon: ShieldCheck, email: "superadmin@sarbix.edu", pass: "Password@123", desc: "Multi-Campus Governance & RBAC Matrix" },
+  { role: "Principal", icon: GraduationCap, email: "principal@delhi.sarbix.edu", pass: "Password@123", desc: "Executive Command Center · Global Governance", landing: "/overview" },
+  { role: "Teacher", icon: BookOpen, email: "teacher@delhi.sarbix.edu", pass: "Password@123", desc: "Classroom Workspace & Daily Roll Call Console", landing: "/teacher" },
+  { role: "Student", icon: User, email: "student@delhi.sarbix.edu", pass: "Password@123", desc: "Personal Desk, Digital ID & Academic Schedule", landing: "/student" },
+  { role: "Parent", icon: HeartHandshake, email: "parent@delhi.sarbix.edu", pass: "Password@123", desc: "Family Portal & Instant UPI QR Fee Payment", landing: "/parent" },
+  { role: "Accountant", icon: CreditCard, email: "accountant@delhi.sarbix.edu", pass: "Password@123", desc: "Institutional Fee Ledger & Tax Invoicing", landing: "/finance" },
+  { role: "Transport", icon: Bus, email: "transport@delhi.sarbix.edu", pass: "Password@123", desc: "Fleet Telemetry & Route 04 Manifest", landing: "/transport" },
+  { role: "Super Admin", icon: ShieldCheck, email: "superadmin@sarbix.edu", pass: "Password@123", desc: "Multi-Campus Governance & Tamper-Proof Audit", landing: "/overview" },
 ]
 
 export default function LoginPage() {
@@ -62,14 +62,14 @@ export default function LoginPage() {
         return
       }
 
-      // Route based on role
+      // Route based on role to dedicated workspace
       const userRole = data.data.user.role
       if (userRole === "parent") {
         router.push("/parent")
       } else if (userRole === "student") {
         router.push("/student")
       } else if (userRole === "teacher") {
-        router.push("/attendance")
+        router.push("/teacher")
       } else if (userRole === "accountant") {
         router.push("/finance")
       } else if (userRole === "transport_manager") {
@@ -173,57 +173,78 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Quick Demo Switcher */}
-          <div className="mt-6 rounded-xl border border-border/70 bg-gradient-to-b from-muted/50 to-muted/20 dark:from-muted/20 dark:to-muted/5 p-3.5 shadow-xs">
-            <div className="flex items-center justify-between mb-2.5">
-              <div className="flex items-center space-x-1.5">
+          {/* Quick Evaluator Dropdown Switcher */}
+          <div className="mt-6 rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-card to-muted/30 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-2">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
-                  Evaluator Role Switcher
+                  Evaluator Fast-Auth Role Switcher
                 </span>
               </div>
-              <span className="text-[10px] text-muted-foreground font-mono">1-Click Fast Auth</span>
+              <Badge variant="outline" className="text-[9px] font-mono uppercase bg-background border-indigo-500/30 text-indigo-500">
+                Dropdown Select
+              </Badge>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              {DEMO_PRESETS.map((p) => {
-                const isActive = email === p.email
-                const Icon = p.icon
-                return (
-                  <button
-                    key={p.role}
-                    type="button"
-                    onClick={() => fillPreset(p.email, p.pass)}
-                    className={cn(
-                      "group inline-flex items-center space-x-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all duration-150",
-                      isActive
-                        ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/30 ring-2 ring-indigo-500/30 font-semibold scale-[1.02]"
-                        : "bg-background/90 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/80 hover:border-border"
-                    )}
-                    title={`${p.role}: ${p.desc}`}
-                  >
-                    <Icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-white" : "text-indigo-500 group-hover:text-foreground")} />
-                    <span>{p.role}</span>
-                  </button>
-                )
-              })}
+            <div className="space-y-1.5">
+              <label htmlFor="role-select" className="text-[11px] text-muted-foreground font-medium">
+                Select persona to autofill credentials &amp; experience dedicated dashboard:
+              </label>
+              
+              <select
+                id="role-select"
+                value={DEMO_PRESETS.find(p => p.email === email)?.role || "Principal"}
+                onChange={(e) => {
+                  const selected = DEMO_PRESETS.find(p => p.role === e.target.value)
+                  if (selected) {
+                    fillPreset(selected.email, selected.pass)
+                  }
+                }}
+                className="w-full h-10 px-3 py-2 rounded-xl border border-border bg-background text-xs font-semibold text-foreground shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer transition-all hover:border-indigo-500/40"
+              >
+                {DEMO_PRESETS.map((p) => (
+                  <option key={p.role} value={p.role}>
+                    {p.role === "Principal" && "👑 Principal — Executive Command Center (/overview)"}
+                    {p.role === "Teacher" && "📚 Teacher — Classroom & Daily Roll Call (/teacher)"}
+                    {p.role === "Student" && "🎓 Student — Digital ID & Learning Hub (/student)"}
+                    {p.role === "Parent" && "👨‍👩‍👧 Parent — Family Portal & Fee QR Pay (/parent)"}
+                    {p.role === "Accountant" && "💳 Accountant — Bursar Ledger & Invoicing (/finance)"}
+                    {p.role === "Transport" && "🚌 Transport Manager — Fleet Telemetry (/transport)"}
+                    {p.role === "Super Admin" && "🛡️ Super Admin — Multi-Campus Governance (/overview)"}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Active Preset Feedback Ribbon */}
+            {/* Active Selected Role Preview Card */}
             {(() => {
-              const active = DEMO_PRESETS.find((p) => p.email === email)
-              if (!active) return null
+              const active = DEMO_PRESETS.find((p) => p.email === email) || DEMO_PRESETS[0]
+              const Icon = active.icon
               return (
-                <div className="mt-2.5 flex items-center justify-between rounded-lg bg-indigo-500/10 dark:bg-indigo-500/15 px-3 py-1.5 text-xs border border-indigo-500/20 transition-all">
-                  <div className="flex items-center space-x-2 min-w-0">
-                    <Sparkles className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                    <span className="text-indigo-900 dark:text-indigo-200 truncate font-medium text-[11px]">
-                      {active.desc}
-                    </span>
+                <div className="mt-3 rounded-xl border border-indigo-500/25 bg-indigo-500/5 dark:bg-indigo-500/10 p-3 transition-all animate-in fade-in">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2.5 min-w-0">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-sm shadow-indigo-600/30">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center space-x-1.5">
+                          <span className="font-semibold text-xs text-foreground truncate">{active.role}</span>
+                          <span className="text-[10px] text-muted-foreground font-mono truncate">({active.email})</span>
+                        </div>
+                        <p className="text-[11px] text-indigo-700 dark:text-indigo-300 font-medium truncate">
+                          {active.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="shrink-0 ml-2 text-right">
+                      <Badge className="bg-indigo-600 text-white font-mono text-[9px] uppercase tracking-wide">
+                        Lands: {active.landing}
+                      </Badge>
+                    </div>
                   </div>
-                  <span className="font-mono text-[10px] uppercase font-bold text-indigo-700 dark:text-indigo-300 tracking-wider shrink-0 ml-2 bg-indigo-500/15 px-1.5 py-0.5 rounded">
-                    {active.role}
-                  </span>
                 </div>
               )
             })()}

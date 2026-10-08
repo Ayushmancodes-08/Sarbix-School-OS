@@ -1,0 +1,23 @@
+{
+  "name": "sarbix-school-os-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Unified AI-Powered School Operating System for Sarbix Growth Agency & Co.",
+  "scripts": {
+    "dev": "npm --prefix sarbix-os run dev",
+    "build": "npm --prefix sarbix-os run build",
+    "start": "npm --prefix sarbix-os start",
+    "lint": "npm --prefix sarbix-os run lint",
+    "typecheck": "npm --prefix sarbix-os run typecheck",
+    "postinstall": "npm --prefix sarbix-os install"
+  },
+  "keywords": [
+    "school-os",
+    "education-erp",
+    "nextjs",
+    "supabase",
+    "fullstack"
+  ],
+  "author": "Sarbix Growth Agency & Co.",
+  "license": "Proprietary"
+}

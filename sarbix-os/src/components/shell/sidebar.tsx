@@ -257,17 +257,17 @@ export function Sidebar({ user, campusName, mobileOpen, onCloseMobile }: Sidebar
                 href={item.href}
                 onClick={onCloseMobile}
                 className={cn(
-                  "group flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors",
+                  "group flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-medium transition-all duration-200",
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/25 font-semibold"
+                    : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                 )}
               >
                 <div className="flex items-center space-x-3">
                   <Icon
                     className={cn(
-                      "h-4 w-4 shrink-0 transition-colors",
-                      isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
+                      "h-4 w-4 shrink-0 transition-transform duration-200 group-hover:scale-105",
+                      isActive ? "text-white" : "text-muted-foreground group-hover:text-indigo-500"
                     )}
                   />
                   <span>{item.title}</span>

@@ -17,7 +17,8 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        headline: ['"Hanken Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+        headline: ['"Plus Jakarta Sans"', '"Hanken Grotesk"', 'sans-serif'],
+        heading: ['"Plus Jakarta Sans"', '"Hanken Grotesk"', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"Space Grotesk"', '"JetBrains Mono"', 'monospace'],
       },

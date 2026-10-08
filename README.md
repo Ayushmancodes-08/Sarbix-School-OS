@@ -9,25 +9,26 @@
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start (Unified 1-Command Startup)
+
+Both frontend and backend APIs are unified in Next.js 15 App Router. You can run everything together with a single command straight from the root directory:
 
 ```bash
 # 1. Clone repository
 git clone https://github.com/Ayushmancodes-08/Sarbix-School-OS.git
-cd Sarbix-School-OS/sarbix-os
+cd Sarbix-School-OS
 
 # 2. Install dependencies
 npm install
 
 # 3. Configure environment
-# Duplicate .env.example to .env.local and verify Supabase credentials
-cp .env.example .env.local
+# Ensure sarbix-os/.env.local contains your Supabase credentials (pre-configured)
 
-# 4. Start local development server
+# 4. Start fullstack application (Frontend + Backend APIs together)
 npm run dev
 ```
 
-Visit **`http://localhost:3000/login`** in your browser.
+Visit **`http://localhost:3000/login`** in your browser. All API routes (`/api/auth/*`, `/api/attendance/*`, `/api/finance/*`, `/api/students/*`) and client dashboards boot together concurrently.
 
 ---
 

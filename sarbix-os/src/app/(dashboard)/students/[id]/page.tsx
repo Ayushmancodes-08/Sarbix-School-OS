@@ -54,8 +54,8 @@ export default async function StudentProfilePage({
       {/* Hero Dossier Header */}
       <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center space-x-5">
-            <Avatar className="h-20 w-20 ring-4 ring-indigo-500/10">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+            <Avatar className="h-16 w-16 sm:h-20 sm:w-20 ring-4 ring-indigo-500/10">
               <AvatarFallback className="text-2xl font-bold bg-indigo-600 text-white">
                 {student.firstName[0]}
                 {student.lastName[0]}

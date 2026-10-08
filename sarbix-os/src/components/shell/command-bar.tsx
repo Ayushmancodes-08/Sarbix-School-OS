@@ -44,15 +44,15 @@ export function CommandBar({
   )
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-background/80 px-3 sm:px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-30 flex h-16 w-full max-w-full items-center justify-between border-b border-border bg-background/80 px-2.5 sm:px-6 backdrop-blur-md overflow-x-hidden">
       {/* Left: Hamburger menu (mobile) + Campus Switcher & Breadcrumb Context */}
-      <div className="flex items-center space-x-2 sm:space-x-4">
+      <div className="flex items-center space-x-1.5 sm:space-x-4 min-w-0">
         {onOpenMobileMenu && (
           <Button
             variant="ghost"
             size="icon"
             onClick={onOpenMobileMenu}
-            className="h-9 w-9 lg:hidden text-muted-foreground hover:text-foreground"
+            className="h-9 w-9 shrink-0 lg:hidden text-muted-foreground hover:text-foreground"
             aria-label="Open navigation sidebar"
           >
             <Menu className="h-5 w-5" />
@@ -64,10 +64,10 @@ export function CommandBar({
             <Button
               variant="outline"
               size="sm"
-              className="h-9 gap-1.5 sm:gap-2 border-border/80 bg-background font-medium text-xs hover:bg-muted px-2.5 sm:px-3"
+              className="h-9 gap-1.5 sm:gap-2 border-border/80 bg-background font-medium text-xs hover:bg-muted px-2 sm:px-3 shrink-0"
             >
               <Building2 className="h-3.5 w-3.5 text-indigo-500 shrink-0" />
-              <span className="max-w-[110px] sm:max-w-[160px] truncate">{selectedCampus?.name ?? "Campus"}</span>
+              <span className="max-w-[95px] xs:max-w-[130px] sm:max-w-[160px] truncate">{selectedCampus?.name ?? "Campus"}</span>
               <span className="hidden sm:inline-block rounded bg-muted px-1.5 py-0.5 text-[9px] font-mono text-muted-foreground">
                 {selectedCampus?.code}
               </span>
@@ -118,13 +118,13 @@ export function CommandBar({
       </div>
 
       {/* Right: Actions, AI Copilot, Theme Toggle, Notifications */}
-      <div className="flex items-center space-x-2.5">
+      <div className="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
         {/* OmniSearch mobile button */}
         <Button
           variant="outline"
           size="icon"
           onClick={onOpenCommandPalette}
-          className="h-9 w-9 lg:hidden"
+          className="h-8 w-8 sm:h-9 sm:w-9 hidden sm:inline-flex lg:hidden"
         >
           <Search className="h-4 w-4" />
         </Button>
@@ -133,10 +133,10 @@ export function CommandBar({
         <Button
           onClick={onOpenCopilot}
           size="sm"
-          className="h-9 gap-1.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white shadow-sm shadow-indigo-500/20 text-xs font-medium"
+          className="h-8 sm:h-9 px-2 sm:px-3 gap-1.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white shadow-sm shadow-indigo-500/20 text-xs font-medium"
         >
           <Sparkles className="h-3.5 w-3.5 text-indigo-200" />
-          <span className="hidden sm:inline">Sarbix Copilot</span>
+          <span className="hidden xs:inline sm:inline">Copilot</span>
         </Button>
 
         {/* Theme switcher */}
@@ -144,7 +144,7 @@ export function CommandBar({
           variant="ghost"
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="h-9 w-9 text-muted-foreground hover:text-foreground"
+          className="h-8 w-8 sm:h-9 sm:w-9 text-muted-foreground hover:text-foreground"
         >
           <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -156,11 +156,11 @@ export function CommandBar({
           <Button
             variant="ghost"
             size="icon"
-            className="h-9 w-9 text-muted-foreground hover:text-foreground"
+            className="h-8 w-8 sm:h-9 sm:w-9 text-muted-foreground hover:text-foreground"
           >
             <Bell className="h-4 w-4" />
           </Button>
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-indigo-600" />
+          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-indigo-600" />
         </div>
       </div>
     </header>

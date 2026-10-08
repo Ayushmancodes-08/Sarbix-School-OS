@@ -23,7 +23,7 @@ export function DashboardShell({ user, campuses, children }: DashboardShellProps
   const currentCampus = campuses.find((c) => c.id === user.campusId) || campuses[0]
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background w-full max-w-full overflow-x-hidden relative">
       {/* Persistent Desktop & Slideout Mobile Sidebar */}
       <Sidebar
         user={user}
@@ -33,7 +33,7 @@ export function DashboardShell({ user, campuses, children }: DashboardShellProps
       />
 
       {/* Main Content Area */}
-      <div className="lg:pl-64 flex flex-col min-h-screen pb-16 lg:pb-0 transition-all duration-300">
+      <div className="lg:pl-64 flex flex-col min-h-screen pb-16 lg:pb-0 transition-all duration-300 w-full max-w-full overflow-x-hidden">
         <CommandBar
           campuses={campuses}
           currentCampusId={user.campusId}
@@ -42,7 +42,7 @@ export function DashboardShell({ user, campuses, children }: DashboardShellProps
           onOpenMobileMenu={() => setMobileMenuOpen(true)}
         />
 
-        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 w-full max-w-full overflow-x-hidden">
           {children}
         </main>
       </div>

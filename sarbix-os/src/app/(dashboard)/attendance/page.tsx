@@ -154,27 +154,27 @@ export default function AttendanceConsolePage() {
   return (
     <div className="space-y-6">
       {/* Top Header & Breadcrumb */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="flex items-center space-x-2">
-            <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
               Rapid Attendance Console
             </h1>
-            <Badge variant="outline" className="border-indigo-500/30 bg-indigo-500/10 text-indigo-500 font-mono text-[10px]">
+            <Badge variant="outline" className="border-indigo-500/30 bg-indigo-500/10 text-indigo-500 font-mono text-[10px] shrink-0">
               DAILY ROSTER
             </Badge>
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
             Fast keyboard-friendly roll call session. Record period or homeroom attendance in &lt;15 seconds.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => markAll("present")}
-            className="text-xs h-9"
+            className="text-xs h-8 sm:h-9"
           >
             <CheckCircle2 className="mr-1.5 h-3.5 w-3.5 text-emerald-500" />
             Mark All Present
@@ -183,7 +183,7 @@ export default function AttendanceConsolePage() {
             size="sm"
             onClick={handleSaveAttendance}
             disabled={isSubmitting}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs h-9 px-4 font-semibold"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs h-8 sm:h-9 px-3 sm:px-4 font-semibold"
           >
             <Save className="mr-1.5 h-3.5 w-3.5" />
             {isSubmitting ? "Saving..." : "Commit Attendance"}
@@ -349,7 +349,7 @@ export default function AttendanceConsolePage() {
                   student.status === "late" && "bg-amber-500/5"
                 )}
               >
-                <div className="flex items-center space-x-3.5 min-w-[200px]">
+                <div className="flex items-center space-x-3.5 min-w-0 flex-1">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-muted font-mono text-xs font-bold text-muted-foreground">
                     {idx + 1}
                   </span>

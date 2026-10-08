@@ -34,30 +34,30 @@ export default async function OverviewPage() {
   return (
     <div className="space-y-8">
       {/* Page Title & Operational Banner */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="flex items-center space-x-2">
-            <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
               Institutional Command Center
             </h1>
-            <Badge variant="outline" className="border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono text-xs">
+            <Badge variant="outline" className="border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono text-[10px] sm:text-xs shrink-0">
               LIVE TELEMETRY
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
             Multi-branch operational intelligence, financial realization, and daily academic status.
           </p>
         </div>
 
         {/* Quick Action Toolbar */}
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" className="gap-1.5 text-xs" asChild>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8 sm:h-9" asChild>
             <Link href="/admissions">
               <PlusCircle className="h-3.5 w-3.5" />
               <span>New Admission</span>
             </Link>
           </Button>
-          <Button size="sm" className="gap-1.5 text-xs bg-indigo-600 hover:bg-indigo-700 text-white" asChild>
+          <Button size="sm" className="gap-1.5 text-xs h-8 sm:h-9 bg-indigo-600 hover:bg-indigo-700 text-white" asChild>
             <Link href="/attendance">
               <CalendarCheck className="h-3.5 w-3.5" />
               <span>Daily Attendance</span>
@@ -243,7 +243,7 @@ export default async function OverviewPage() {
                       <p className="mt-1 text-xs text-foreground font-medium">
                         {log.userEmail}
                       </p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[11px] text-muted-foreground break-all line-clamp-2">
                         {JSON.stringify(log.details).replace(/[{}"]/g, "")}
                       </p>
                     </div>

@@ -7,8 +7,6 @@ export const viewport: Viewport = {
   themeColor: '#131E3D',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: 'cover',
 };
 
@@ -34,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-body text-foreground antialiased selection:bg-accent/20 selection:text-accent select-none touch-manipulation">
+      <body className="min-h-screen bg-background font-body text-foreground antialiased selection:bg-accent/20 selection:text-accent">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

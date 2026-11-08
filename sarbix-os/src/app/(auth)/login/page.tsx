@@ -186,9 +186,9 @@ export default function LoginPage() {
     : DEMO_PRESETS.filter((p) => p.category === selectedCategory)
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100 selection:bg-indigo-500/30 selection:text-indigo-300">
+    <div className="min-h-screen w-full overflow-y-auto bg-slate-950 text-slate-100 selection:bg-indigo-500/30 selection:text-indigo-300 flex flex-col lg:flex-row">
       {/* Left Column: Institutional Brand & Kinetic Identity (Desktop) */}
-      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950/80 p-12 text-white lg:flex border-r border-slate-800/80">
+      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950/80 p-12 text-white lg:flex border-r border-slate-800/80 min-h-screen">
         <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-0 h-[450px] w-[450px] rounded-full bg-cyan-600/15 blur-3xl pointer-events-none" />
 
@@ -254,8 +254,8 @@ export default function LoginPage() {
       </div>
 
       {/* Right Column: High-Velocity Authentication Cockpit */}
-      <div className="flex flex-1 flex-col justify-center px-4 py-8 sm:px-10 lg:px-14 xl:px-20 max-w-2xl mx-auto w-full">
-        <div className="w-full space-y-6">
+      <div className="flex flex-1 flex-col justify-start lg:justify-center px-4 py-8 sm:px-10 lg:px-14 xl:px-20 max-w-2xl mx-auto w-full min-h-screen overflow-y-auto">
+        <div className="w-full space-y-6 my-auto">
           {/* Mobile Header Branding */}
           <div className="lg:hidden flex items-center space-x-3 mb-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/30">

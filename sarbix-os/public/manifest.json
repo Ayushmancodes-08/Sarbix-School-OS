@@ -1,0 +1,42 @@
+{
+  "name": "Sarbix School OS",
+  "short_name": "Sarbix OS",
+  "description": "Next-Generation AI-Powered Institutional School Operating System",
+  "start_url": "/login",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1120",
+  "theme_color": "#131E3D",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity", "management"],
+  "shortcuts": [
+    {
+      "name": "Class Attendance",
+      "url": "/attendance",
+      "description": "Rapid roll-call attendance submission"
+    },
+    {
+      "name": "Student Desk",
+      "url": "/student",
+      "description": "Digital student ID and timetable"
+    },
+    {
+      "name": "Family Portal",
+      "url": "/parent",
+      "description": "Instant fee payment & live bus tracking"
+    }
+  ]
+}

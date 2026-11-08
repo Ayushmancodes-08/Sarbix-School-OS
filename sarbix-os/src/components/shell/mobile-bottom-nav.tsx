@@ -83,7 +83,7 @@ export function MobileBottomNav({
   const isActionActive = pathname === actionHref
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-border bg-card/95 backdrop-blur-md px-2 lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-border bg-card/95 backdrop-blur-md px-2 lg:hidden pb-[env(safe-area-inset-bottom,0px)]">
       {/* 1. Home Dashboard */}
       <Link
         href={homeHref}

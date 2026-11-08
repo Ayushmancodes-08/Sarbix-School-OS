@@ -82,9 +82,9 @@ export async function middleware(req: NextRequest) {
       }
     }
 
-    // Strict URL check for gated routes
+    // Strict URL check for gated routes (exact segment match to prevent /student matching /students)
     for (const [routePrefix, allowedRoles] of Object.entries(ROLE_RESTRICTIONS)) {
-      if (pathname.startsWith(routePrefix)) {
+      if (pathname === routePrefix || pathname.startsWith(`${routePrefix}/`)) {
         if (!allowedRoles.includes(userRole)) {
           const fallback = ROLE_HOMES[userRole] || "/overview"
           return NextResponse.redirect(new URL(fallback, req.url))

@@ -80,23 +80,18 @@ export function QRPaymentModal({
       if (res.ok && data.success) {
         const rcpt = data.data.receiptNumber
         setSuccessReceipt(rcpt)
-        setTimeout(() => {
-          onSuccess(rcpt, amount)
-        }, 1500)
+        // Keep receipt visible without auto-closing so payer and bursar can inspect it!
+        onSuccess(rcpt, amount)
       } else {
         // Fallback local receipt simulation
         const fallbackRcpt = `RCP-2026-${Math.floor(10000 + Math.random() * 90000)}`
         setSuccessReceipt(fallbackRcpt)
-        setTimeout(() => {
-          onSuccess(fallbackRcpt, amount)
-        }, 1500)
+        onSuccess(fallbackRcpt, amount)
       }
     } catch {
       const fallbackRcpt = `RCP-2026-${Math.floor(10000 + Math.random() * 90000)}`
       setSuccessReceipt(fallbackRcpt)
-      setTimeout(() => {
-        onSuccess(fallbackRcpt, amount)
-      }, 1500)
+      onSuccess(fallbackRcpt, amount)
     } finally {
       setIsSimulating(false)
     }
@@ -151,6 +146,15 @@ export function QRPaymentModal({
                   <span className="text-muted-foreground">Amount Credited:</span>
                   <span className="font-bold text-emerald-600">{formatCurrency(amount)}</span>
                 </div>
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  onClick={onClose}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs h-9 font-semibold"
+                >
+                  Done & Return to Ledger
+                </Button>
               </div>
             </div>
           ) : (

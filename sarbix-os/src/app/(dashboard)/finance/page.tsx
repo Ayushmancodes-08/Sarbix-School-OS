@@ -154,9 +154,58 @@ export default function FinancePage() {
   const totalOutstanding = invoices.reduce((acc, inv) => acc + inv.balanceAmount, 0)
   const collectionRate = totalBilled > 0 ? ((totalCollected / totalBilled) * 100).toFixed(1) : "0"
 
+  const [demandDueDate, setDemandDueDate] = React.useState("2026-10-31")
+  const [demandNotes, setDemandNotes] = React.useState("")
+  const [isNotifying, setIsNotifying] = React.useState(false)
+
   const openPaymentModal = (inv: InvoiceItem) => {
     setSelectedInvoice(inv)
     setPayAmount(inv.balanceAmount)
+    setDemandDueDate(inv.dueDate || "2026-10-31")
+    setDemandNotes("")
+  }
+
+  const handleSendDueNotice = async () => {
+    if (!selectedInvoice) return
+    setIsNotifying(true)
+
+    try {
+      const res = await fetch("/api/finance/demand", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          invoiceId: selectedInvoice.id,
+          amount: Number(payAmount),
+          dueDate: demandDueDate,
+          notes: demandNotes || `Institutional Tuition Demand: Clear due by ${demandDueDate}`,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok && data.success) {
+        setInvoices((prev) =>
+          prev.map((inv) =>
+            inv.id === selectedInvoice.id
+              ? {
+                  ...inv,
+                  balanceAmount: Number(payAmount),
+                  dueDate: demandDueDate,
+                }
+              : inv
+          )
+        )
+        setReceiptNotice({
+          number: `NOTICE-${selectedInvoice.invoiceNumber}`,
+          amount: Number(payAmount),
+        })
+        setSelectedInvoice(null)
+      }
+    } catch {
+      // fallback
+    } finally {
+      setIsNotifying(false)
+    }
   }
 
   const handleCollectPayment = async () => {
@@ -500,12 +549,11 @@ export default function FinancePage() {
 
               <div>
                 <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-muted-foreground">
-                  Collection Amount (INR)
+                  Collection / Demanded Due Amount (INR)
                 </label>
                 <Input
                   type="number"
                   value={payAmount}
-                  max={selectedInvoice.balanceAmount}
                   onChange={(e) => setPayAmount(Number(e.target.value))}
                   className="mt-1 font-mono text-sm"
                 />
@@ -513,7 +561,19 @@ export default function FinancePage() {
 
               <div>
                 <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-muted-foreground">
-                  Payment Method
+                  Clear Due Deadline (Shown to Student & Parent)
+                </label>
+                <Input
+                  type="date"
+                  value={demandDueDate}
+                  onChange={(e) => setDemandDueDate(e.target.value)}
+                  className="mt-1 font-mono text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+                  Payment Mode (If Recording Direct Counter Payment)
                 </label>
                 <select
                   value={paymentMethod}
@@ -528,7 +588,7 @@ export default function FinancePage() {
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -539,11 +599,20 @@ export default function FinancePage() {
               </Button>
               <Button
                 size="sm"
+                variant="secondary"
+                onClick={handleSendDueNotice}
+                disabled={isNotifying || payAmount <= 0}
+                className="text-xs font-semibold gap-1.5"
+              >
+                {isNotifying ? "Dispatching..." : `Notify Student & Parent to Clear Due by ${demandDueDate}`}
+              </Button>
+              <Button
+                size="sm"
                 onClick={handleCollectPayment}
                 disabled={isProcessing || payAmount <= 0}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold"
               >
-                {isProcessing ? "Processing..." : `Confirm Payment of ${formatCurrency(payAmount)}`}
+                {isProcessing ? "Processing..." : `Record Direct Payment`}
               </Button>
             </DialogFooter>
           </DialogContent>

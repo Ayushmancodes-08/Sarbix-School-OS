@@ -518,6 +518,7 @@ export interface Invoice {
   classGrade?: string;
   feeHead?: string;
   amount?: number;
+  notes?: string;
   paidAt?: string;
   createdAt?: string;
   updatedAt?: string;

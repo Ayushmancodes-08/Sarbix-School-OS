@@ -11,6 +11,7 @@ import type {
   PermissionKey,
   JobApplication,
   TeacherAssignment,
+  Announcement,
 } from "@/types"
 
 // Role-based default permissions
@@ -756,6 +757,19 @@ export const db = {
       }
       return inv
     },
+    updateDemandNotice: (id: string, demandedAmount: number, dueDate: string) => {
+      const inv = FEE_INVOICES.find((f) => f.id === id)
+      if (!inv) return null
+      inv.balanceAmount = demandedAmount
+      inv.dueDate = dueDate
+      inv.status = demandedAmount > 0 ? "partial" : "paid"
+      inv.notes = `Due reminder issued on ${new Date().toLocaleDateString("en-IN")}`
+      const student = STUDENTS.find((s) => s.id === inv.studentId)
+      if (student) {
+        student.pendingFeeAmount = demandedAmount
+      }
+      return inv
+    },
   },
   timetable: {
     getByClass: (grade: string, section: string) =>
@@ -830,6 +844,15 @@ export const db = {
       const app = JOB_APPLICATIONS.find((a) => a.id === id)
       if (app) app.status = status
       return app
+    },
+  },
+  announcements: {
+    getAll: () => ANNOUNCEMENTS,
+    getForAudience: (audience: "ALL" | "STUDENTS" | "TEACHERS" | "PARENTS" | "STAFF") =>
+      ANNOUNCEMENTS.filter((a) => a.audience === "ALL" || a.audience === audience),
+    create: (announcement: Announcement) => {
+      ANNOUNCEMENTS.unshift(announcement)
+      return announcement
     },
   },
 }
@@ -1056,5 +1079,52 @@ export const EXAMS_LIST = [
       { name: "Computer Science & AI", date: "2026-11-02", maxMarks: 100 },
       { name: "English Literature & Composition", date: "2026-11-04", maxMarks: 100 },
     ],
+  },
+]
+
+export const ANNOUNCEMENTS: Announcement[] = [
+  {
+    id: "ann-01",
+    campusId: "campus-delhi-01",
+    title: "Term 1 Comprehensive Assessment Schedule & Hall Ticket QR",
+    content:
+      "Centralized Term 1 assessment commence October 24, 2026. Hall tickets featuring anti-tamper verification QR codes will be distributed during homeroom. Please ensure all course worksheets are submitted.",
+    authorName: "Dr. A. K. Sharma (Principal)",
+    audience: "STUDENTS",
+    priority: "URGENT",
+    publishedAt: "2026-10-07T08:30:00Z",
+  },
+  {
+    id: "ann-02",
+    campusId: "campus-delhi-01",
+    title: "Annual STEM & Robotics Exhibition 2026 - Prototype Review",
+    content:
+      "All Class 10-A project teams registered for the AI and Robotics showcase must submit their system architecture diagrams and parts lists to Lab 2 by Friday, 3:30 PM.",
+    authorName: "Ms. Neha Gupta (Robotics Mentor)",
+    audience: "ALL",
+    priority: "IMPORTANT",
+    publishedAt: "2026-10-06T11:15:00Z",
+  },
+  {
+    id: "ann-03",
+    campusId: "campus-delhi-01",
+    title: "Route 04 Transit Telemetry & Winter Departure Time Shift",
+    content:
+      "Notice for students boarding Route 04: Morning pickup from Rohini Sector 14 will operate at 07:10 AM sharp. Live GPS telemetry is actively streaming on the Student Transit card.",
+    authorName: "Capt. R. Deshmukh (Fleet Supervisor)",
+    audience: "STUDENTS",
+    priority: "ROUTINE",
+    publishedAt: "2026-10-05T09:00:00Z",
+  },
+  {
+    id: "ann-04",
+    campusId: "campus-delhi-01",
+    title: "Inter-School Science Olympiad State Round Qualifiers",
+    content:
+      "Congratulations to Aarav Patel (Grade 10-A) and Ananya Sen (Grade 10-B) on qualifying for the National Round of the Science & Mathematics Olympiad!",
+    authorName: "Academic Council",
+    audience: "ALL",
+    priority: "ROUTINE",
+    publishedAt: "2026-10-04T14:00:00Z",
   },
 ]

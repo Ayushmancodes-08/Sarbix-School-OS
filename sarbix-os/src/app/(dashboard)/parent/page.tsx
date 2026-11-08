@@ -209,6 +209,34 @@ export default function ParentPortalPage() {
         </div>
       )}
 
+      {/* Due Notice Alert Strip (Triggered when Accountant demands due) */}
+      {child.pendingFee > 0 && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs">
+          <div className="flex items-center space-x-3">
+            <div className="h-8 w-8 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
+              <AlertCircle className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="font-semibold text-rose-600 dark:text-rose-400">
+                Action Required: Outstanding Fee Demand of {formatCurrency(child.pendingFee)}
+              </p>
+              <p className="text-muted-foreground text-[11px] mt-0.5">
+                Institutional Bursar has requested payment by <strong className="font-mono text-foreground">{child.invoices[0]?.dueDate || "October 31, 2026"}</strong> to avoid examination roll block.
+              </p>
+            </div>
+          </div>
+
+          <Button
+            size="sm"
+            onClick={handlePay}
+            className="bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs h-8 gap-1.5 shrink-0"
+          >
+            <QrCode className="h-3.5 w-3.5" />
+            <span>Clear Due via UPI QR Now</span>
+          </Button>
+        </div>
+      )}
+
       {/* Child Hero Banner */}
       <Card className="border-border/80 bg-gradient-to-r from-card via-card to-indigo-500/5 shadow-sm">
         <CardContent className="p-6">

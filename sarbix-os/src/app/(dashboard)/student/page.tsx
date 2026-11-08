@@ -11,6 +11,9 @@ import {
   Sparkles,
   Award,
   FileCheck,
+  Bell,
+  Megaphone,
+  ChevronRight,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,6 +21,7 @@ import { Button } from "@/components/ui/button"
 import { requireAuth } from "@/lib/auth/guard"
 import { db } from "@/lib/data/mock-db"
 import { LiveAttendanceTracker } from "@/components/student/live-attendance-tracker"
+import { StudentNoticeBoard } from "@/components/student/student-notice-board"
 
 export default async function StudentPortalPage() {
   const session = await requireAuth()
@@ -26,6 +30,7 @@ export default async function StudentPortalPage() {
   const student = db.students.getById("std-001") || db.students.getAll()[0]
   const timetable = db.timetable.getByClass(student.classGrade || "Grade 10", student.section || "A")
   const homework = db.academics.getHomework(student.classGrade, student.section)
+  const announcements = db.announcements.getForAudience("STUDENTS")
 
   // Live synced teacher attendance record
   const studentAttendance = db.attendance.getByStudent(student.id)
@@ -52,6 +57,31 @@ export default async function StudentPortalPage() {
           </p>
         </div>
       </div>
+
+      {/* Due Fee Alert Notification (Active when Bursar issues demand) */}
+      {(student.pendingFeeAmount || 0) > 0 && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs">
+          <div className="flex items-center space-x-3">
+            <div className="h-8 w-8 rounded-lg bg-amber-500/20 text-amber-500 flex items-center justify-center shrink-0">
+              <AlertCircle className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="font-semibold text-amber-600 dark:text-amber-400">
+                Institutional Bursar Notification: Outstanding Due of ₹{(student.pendingFeeAmount || 0).toLocaleString()}
+              </p>
+              <p className="text-muted-foreground text-[11px] mt-0.5">
+                Please ask your guardian or parent (Vikram Patel) to clear this pending amount via the Family Portal before the due deadline.
+              </p>
+            </div>
+          </div>
+          <Badge variant="outline" className="text-xs font-mono border-amber-500/40 text-amber-500 shrink-0">
+            Due Reminder Active
+          </Badge>
+        </div>
+      )}
+
+      {/* Official Campus Notice Band & Circulars */}
+      <StudentNoticeBoard announcements={announcements} />
 
       {/* Main Grid: Left Digital ID Card & Right Schedule */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

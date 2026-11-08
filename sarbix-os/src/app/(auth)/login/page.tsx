@@ -321,8 +321,22 @@ export default function LoginPage() {
             </Button>
           </form>
 
+          {/* Public Application Links */}
+          <div className="mt-6 pt-6 border-t border-border/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+            <span className="text-[11px]">Prospective Applicant?</span>
+            <div className="flex items-center space-x-3">
+              <a href="/apply/admission" className="text-primary hover:underline font-medium">
+                Apply for Admission →
+              </a>
+              <span className="text-border">|</span>
+              <a href="/apply/job" className="text-primary hover:underline font-medium">
+                Faculty Careers →
+              </a>
+            </div>
+          </div>
+
           {/* Security footnote */}
-          <div className="mt-8 flex items-center justify-center space-x-2 text-xs text-muted-foreground">
+          <div className="mt-6 flex items-center justify-center space-x-2 text-xs text-muted-foreground">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
             <span>Protected by HttpOnly JWT Session & RBAC Enforcement</span>
           </div>

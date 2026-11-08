@@ -91,6 +91,39 @@ export interface User {
   isActive?: boolean;
 }
 
+export interface JobApplication {
+  id: string
+  name: string
+  email: string
+  phone: string
+  subject: string
+  qualification: string
+  experience: string
+  coverLetter: string
+  status: "PENDING" | "HIRED" | "REJECTED"
+  appliedAt: string
+}
+
+export interface TeacherAssignment {
+  id: string
+  teacherId: string
+  teacherName: string
+  teacherEmail: string
+  classGrade: string
+  section: string
+  subject: string
+  isHomeroom?: boolean
+}
+
+export interface GeneratedCredentialResult {
+  userId: string
+  username: string
+  tempPassword: string
+  role: CanonicalRole
+  assignedToName: string
+  assignedClasses?: string
+}
+
 export interface Role {
   id: string;
   key: CanonicalRole;

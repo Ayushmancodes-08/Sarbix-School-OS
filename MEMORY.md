@@ -106,3 +106,4 @@ npm start
 - Built with modern glassmorphism, dark/light theme awareness, and responsive mobile-first views.
 - **Global Command Bar**: Press `Ctrl + K` or `Cmd + K` anywhere to navigate or trigger instant actions.
 - **Sarbix Copilot**: Built-in institutional AI sidecar assistant for querying student status, fee defaults, and bus telemetry.
+

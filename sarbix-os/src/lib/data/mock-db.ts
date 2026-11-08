@@ -9,6 +9,8 @@ import type {
   AuditLog,
   UserRole,
   PermissionKey,
+  JobApplication,
+  TeacherAssignment,
 } from "@/types"
 
 // Role-based default permissions
@@ -801,7 +803,96 @@ export const db = {
       return matched.length > 0 ? matched : [STUDENTS[0], STUDENTS[1]]
     },
   },
+  teacherAssignments: {
+    getAll: () => TEACHER_ASSIGNMENTS,
+    getByTeacherId: (teacherId: string) =>
+      TEACHER_ASSIGNMENTS.filter((ta) => ta.teacherId === teacherId),
+    getByClass: (classGrade: string, section: string) =>
+      TEACHER_ASSIGNMENTS.filter((ta) => ta.classGrade === classGrade && ta.section === section),
+    assign: (assignment: TeacherAssignment) => {
+      TEACHER_ASSIGNMENTS.push(assignment)
+      return assignment
+    },
+  },
+  jobApplications: {
+    getAll: () => JOB_APPLICATIONS,
+    create: (app: Omit<JobApplication, "id" | "status" | "appliedAt">) => {
+      const newApp: JobApplication = {
+        ...app,
+        id: `JOB-${Date.now()}`,
+        status: "PENDING",
+        appliedAt: new Date().toISOString(),
+      }
+      JOB_APPLICATIONS.unshift(newApp)
+      return newApp
+    },
+    updateStatus: (id: string, status: "PENDING" | "HIRED" | "REJECTED") => {
+      const app = JOB_APPLICATIONS.find((a) => a.id === id)
+      if (app) app.status = status
+      return app
+    },
+  },
 }
+
+export const TEACHER_ASSIGNMENTS: TeacherAssignment[] = [
+  {
+    id: "ta-01",
+    teacherId: "usr-teacher-01",
+    teacherName: "Rajesh Verma",
+    teacherEmail: "teacher@delhi.sarbix.edu",
+    classGrade: "Grade 10",
+    section: "A",
+    subject: "Advanced Mathematics",
+    isHomeroom: true,
+  },
+  {
+    id: "ta-02",
+    teacherId: "usr-teacher-01",
+    teacherName: "Rajesh Verma",
+    teacherEmail: "teacher@delhi.sarbix.edu",
+    classGrade: "Grade 9",
+    section: "B",
+    subject: "Geometry & Trigonometry",
+    isHomeroom: false,
+  },
+  {
+    id: "ta-03",
+    teacherId: "usr-teacher-02",
+    teacherName: "Sunita Sharma",
+    teacherEmail: "sunita.sharma@delhi.sarbix.edu",
+    classGrade: "Grade 10",
+    section: "A",
+    subject: "Physics & Mechanics",
+    isHomeroom: false,
+  },
+]
+
+export const JOB_APPLICATIONS: JobApplication[] = [
+  {
+    id: "JOB-2026-081",
+    name: "Dr. Ananya Sen",
+    email: "ananya.sen@academic.edu",
+    phone: "+91 98112 34991",
+    subject: "Computer Science & AI",
+    qualification: "Ph.D. in Artificial Intelligence, IIT Delhi",
+    experience: "7 years",
+    coverLetter: "Passionate about mentoring high-school coders in neural networks and algorithmic problem solving.",
+    status: "PENDING",
+    appliedAt: "2026-10-07T14:20:00Z",
+  },
+  {
+    id: "JOB-2026-082",
+    name: "Meenakshi Iyer",
+    email: "meenakshi.iyer@school.in",
+    phone: "+91 98450 11283",
+    subject: "English Literature",
+    qualification: "M.A. English, B.Ed (Delhi University)",
+    experience: "5 years",
+    coverLetter: "Committed to fostering creative expression, debate mastery, and critical rhetorical analysis.",
+    status: "PENDING",
+    appliedAt: "2026-10-08T09:15:00Z",
+  },
+]
 
 export const VEHICLES = [
   {

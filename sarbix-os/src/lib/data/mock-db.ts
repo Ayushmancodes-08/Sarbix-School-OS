@@ -278,11 +278,11 @@ export const USERS: (User & { passwordHash: string })[] = [
   {
     id: "usr-student-alias",
     campusId: "campus-delhi-01",
-    email: "aarav.sharma@student.sarbix.edu",
+    email: "aarav.patel@student.sarbix.edu",
     passwordHash: DEFAULT_PASSWORD_HASH,
     role: "student",
     firstName: "Aarav",
-    lastName: "Sharma",
+    lastName: "Patel",
     phone: "+91 98110 00004",
     avatarUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80",
     isActive: true,
@@ -290,13 +290,25 @@ export const USERS: (User & { passwordHash: string })[] = [
   {
     id: "usr-parent-alias",
     campusId: "campus-delhi-01",
-    email: "rajesh.sharma@parent.sarbix.edu",
+    email: "vikram.patel@parent.sarbix.edu",
     passwordHash: DEFAULT_PASSWORD_HASH,
     role: "parent",
-    firstName: "Rajesh",
-    lastName: "Sharma",
+    firstName: "Vikram",
+    lastName: "Patel",
     phone: "+91 98110 00005",
     avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+    isActive: true,
+  },
+  {
+    id: "usr-teacher-alias-2",
+    campusId: "campus-delhi-01",
+    email: "rajesh.verma@delhi.sarbix.edu",
+    passwordHash: DEFAULT_PASSWORD_HASH,
+    role: "teacher",
+    firstName: "Rajesh",
+    lastName: "Verma",
+    phone: "+91 98110 00003",
+    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
     isActive: true,
   },
   {
@@ -342,25 +354,25 @@ export const STUDENTS: Student[] = [
   {
     id: "std-002",
     campusId: "campus-delhi-01",
-    admissionNumber: "ADM-2026-0892",
-    rollNumber: "10A-15",
-    firstName: "Ananya",
-    lastName: "Iyer",
-    dateOfBirth: "2010-07-22",
+    admissionNumber: "ADM-2026-0944",
+    rollNumber: "8B-21",
+    firstName: "Diya",
+    lastName: "Patel",
+    dateOfBirth: "2012-07-22",
     gender: "female",
     bloodGroup: "B+",
-    classGrade: "Grade 10",
-    section: "A",
+    classGrade: "Grade 8",
+    section: "B",
     status: "active",
-    emergencyContactName: "Ramesh Iyer",
-    emergencyContactPhone: "+91 98220 11112",
-    address: "12 Gulmohar Park, New Delhi",
-    parentName: "Ramesh Iyer",
-    parentEmail: "ramesh.iyer@gmail.com",
-    parentPhone: "+91 98220 11112",
+    emergencyContactName: "Vikram Patel (Father)",
+    emergencyContactPhone: "+91 98110 00005",
+    address: "C-42 Hauz Khas Enclave, New Delhi",
+    parentName: "Vikram Patel",
+    parentEmail: "parent@delhi.sarbix.edu",
+    parentPhone: "+91 98110 00005",
     attendancePercentage: 98.2,
     pendingFeeAmount: 0,
-    academicGpa: 3.95,
+    academicGpa: 4.0,
     busRouteNumber: "Route 04 (South Delhi Express)",
   },
   {
@@ -526,13 +538,13 @@ export const FEE_INVOICES: FeeInvoice[] = [
     invoiceNumber: "INV-2026-00892",
     studentId: "std-002",
     campusId: "campus-delhi-01",
-    studentName: "Ananya Iyer",
-    classGrade: "Grade 10-A",
-    feeHead: "Term II Comprehensive Fee",
+    studentName: "Diya Patel",
+    classGrade: "Grade 8-B",
+    feeHead: "Annual Composite Tuition Fee",
     amount: 38000,
     paidAmount: 38000,
     balanceAmount: 0,
-    dueDate: "2026-10-25",
+    dueDate: "2026-09-30",
     status: "paid",
     paidAt: "2026-09-15T11:20:00Z",
     createdAt: "2026-09-01T00:00:00Z",
@@ -673,7 +685,42 @@ export const db = {
   users: {
     getAll: () => USERS,
     getById: (id: string) => USERS.find((u) => u.id === id),
-    getByEmail: (email: string) => USERS.find((u) => u.email.toLowerCase() === email.toLowerCase()),
+    getByEmail: (identifier: string) => {
+      const clean = identifier.trim().toLowerCase()
+      // 1. Direct email match
+      let user = USERS.find((u) => u.email.toLowerCase() === clean)
+      if (user) return user
+
+      // 2. Email prefix match (e.g. "aarav.patel", "vikram.patel", "teacher")
+      user = USERS.find((u) => u.email.split("@")[0].toLowerCase() === clean)
+      if (user) return user
+
+      // 3. User ID match
+      user = USERS.find((u) => u.id.toLowerCase() === clean)
+      if (user) return user
+
+      // 4. Student admission number or roll number match
+      const matchedStudent = STUDENTS.find(
+        (s) =>
+          (s.admissionNumber && s.admissionNumber.toLowerCase() === clean) ||
+          (s.rollNumber && s.rollNumber.toLowerCase() === clean)
+      )
+      if (matchedStudent && matchedStudent.userId) {
+        user = USERS.find((u) => u.id === matchedStudent.userId)
+        if (user) return user
+      }
+
+      // 5. Common role aliases
+      if (clean === "student") return USERS.find((u) => u.id === "usr-student-01")
+      if (clean === "parent") return USERS.find((u) => u.id === "usr-parent-01")
+      if (clean === "teacher") return USERS.find((u) => u.id === "usr-teacher-01")
+      if (clean === "principal") return USERS.find((u) => u.id === "usr-principal-01")
+      if (clean === "accountant" || clean === "finance") return USERS.find((u) => u.id === "usr-accountant-01")
+      if (clean === "transport") return USERS.find((u) => u.id === "usr-transport-01")
+      if (clean === "admin" || clean === "superadmin") return USERS.find((u) => u.id === "usr-super-01")
+
+      return null
+    },
     create: (newUser: User & { passwordHash: string }) => {
       USERS.push(newUser)
       return newUser
@@ -733,6 +780,8 @@ export const db = {
     getAll: (campusId?: string) =>
       campusId ? FEE_INVOICES.filter((f) => f.campusId === campusId) : FEE_INVOICES,
     getById: (id: string) => FEE_INVOICES.find((f) => f.id === id),
+    getByStudent: (studentId: string) =>
+      FEE_INVOICES.filter((f) => f.studentId === studentId),
     createInvoice: (invoice: FeeInvoice) => {
       FEE_INVOICES.unshift(invoice)
       const student = STUDENTS.find((s) => s.id === invoice.studentId)

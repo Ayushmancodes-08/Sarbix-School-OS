@@ -26,8 +26,11 @@ import { StudentNoticeBoard } from "@/components/student/student-notice-board"
 export default async function StudentPortalPage() {
   const session = await requireAuth()
 
-  // Find student record or fallback to primary student
-  const student = db.students.getById("std-001") || db.students.getAll()[0]
+  // Find student record matched to the logged-in user or fallback to primary student (std-001)
+  const student =
+    db.students.getAll().find((s) => s.userId === session.userId || s.id === session.userId) ||
+    db.students.getById("std-001") ||
+    db.students.getAll()[0]
   const timetable = db.timetable.getByClass(student.classGrade || "Grade 10", student.section || "A")
   const homework = db.academics.getHomework(student.classGrade, student.section)
   const announcements = db.announcements.getForAudience("STUDENTS")
@@ -171,6 +174,27 @@ export default async function StudentPortalPage() {
                 <span className="font-mono font-bold text-sm text-amber-500">
                   {homework.filter((h) => h.submissionStatus === "PENDING").length} due this week
                 </span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Connected Guardian & Homeroom Mentor */}
+          <Card className="border-border/80 shadow-sm">
+            <CardHeader className="p-4 pb-2 border-b">
+              <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
+                Family & Mentor Network
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 space-y-3 text-xs">
+              <div>
+                <span className="text-[10px] text-muted-foreground uppercase font-mono block">Registered Guardian</span>
+                <span className="font-semibold text-foreground">{student.parentName || "Vikram Patel"}</span>
+                <span className="text-[11px] text-muted-foreground block font-mono">{student.parentEmail || "parent@delhi.sarbix.edu"}</span>
+              </div>
+              <div className="pt-2 border-t border-border/60">
+                <span className="text-[10px] text-muted-foreground uppercase font-mono block">Homeroom Mentor</span>
+                <span className="font-semibold text-foreground">Mr. Rajesh Verma</span>
+                <span className="text-[11px] text-muted-foreground block font-mono">Class 10-A · teacher@delhi.sarbix.edu</span>
               </div>
             </CardContent>
           </Card>

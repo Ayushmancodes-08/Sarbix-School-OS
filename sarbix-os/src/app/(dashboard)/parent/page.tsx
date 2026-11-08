@@ -67,15 +67,15 @@ const MOCK_CHILDREN: ChildData[] = [
     todayAttendance: "PRESENT",
     attendancePercentage: 96.5,
     gpa: 3.92,
-    pendingFee: 15000,
+    pendingFee: 18500,
     busRoute: "Route 04 (South Delhi Express)",
     classTeacher: "Mr. Rajesh Verma",
     invoices: [
       {
         id: "inv-2026-101",
-        title: "Term 1 Tuition & Lab Fee",
-        amount: 15000,
-        dueDate: "2026-10-15",
+        title: "Term II Tuition & STEM Lab",
+        amount: 18500,
+        dueDate: "2026-10-31",
         status: "partial",
       },
     ],
@@ -98,21 +98,21 @@ const MOCK_CHILDREN: ChildData[] = [
   },
   {
     id: "std-002",
-    name: "Diya Sharma",
+    name: "Diya Patel",
     admissionNumber: "ADM-2026-0944",
     grade: "Grade 8",
     section: "B",
     rollNumber: "8B-21",
     todayAttendance: "PRESENT",
-    attendancePercentage: 98.0,
+    attendancePercentage: 98.2,
     gpa: 4.0,
     pendingFee: 0,
-    busRoute: "Route 09 (Central Corridor)",
+    busRoute: "Route 04 (South Delhi Express)",
     classTeacher: "Ms. Shalini Saxena",
     invoices: [
       {
         id: "inv-2026-102",
-        title: "Annual Composite Fee",
+        title: "Annual Composite Tuition Fee",
         amount: 0,
         dueDate: "2026-09-30",
         status: "paid",
@@ -137,11 +137,40 @@ export default function ParentPortalPage() {
   const [paidSuccess, setPaidSuccess] = React.useState(false)
   const [receiptNumber, setReceiptNumber] = React.useState<string | null>(null)
 
+  // Live fetch synced child records
+  React.useEffect(() => {
+    fetch("/api/parent/children")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.data?.children?.length) {
+          setChildren(data.data.children)
+        }
+      })
+      .catch((err) => console.error("Could not fetch parent children:", err))
+  }, [])
+
   // Modals state
   const [qrPayOpen, setQrPayOpen] = React.useState(false)
   const [viewReceiptModal, setViewReceiptModal] = React.useState<InvoiceDocData | null>(null)
 
-  const handleQRSuccess = (rcpt: string) => {
+  const handleQRSuccess = async (rcpt: string) => {
+    try {
+      const activeInvoice = child?.invoices?.[0]
+      if (activeInvoice) {
+        await fetch("/api/finance/pay", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            invoiceId: activeInvoice.id,
+            amount: child.pendingFee > 0 ? child.pendingFee : 18500,
+            paymentMethod: "UPI",
+          }),
+        })
+      }
+    } catch (e) {
+      console.error("Payment API sync error:", e)
+    }
+
     setChildren((prev) =>
       prev.map((c, idx) =>
         idx === selectedChildIndex

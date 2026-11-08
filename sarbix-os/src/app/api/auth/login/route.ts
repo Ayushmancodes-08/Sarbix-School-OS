@@ -5,7 +5,7 @@ import { verifyPassword } from "@/lib/auth/password"
 import { createSessionToken, setSessionCookie } from "@/lib/auth/session"
 
 const loginSchema = z.object({
-  email: z.string().email("Please provide a valid institutional email"),
+  email: z.string().min(1, "Please provide a valid institutional email, username, or admission number"),
   password: z.string().min(1, "Password is required"),
 })
 

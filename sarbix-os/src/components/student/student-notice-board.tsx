@@ -239,3 +239,4 @@ export function StudentNoticeBoard({ announcements }: StudentNoticeBoardProps) {
     </div>
   )
 }
+
